@@ -10,17 +10,17 @@ const Navbar = () => {
 	};
 	return (
 		<>
-			<div className='bg-gray-700 z-[100]'>
-				<div className='flex justify-between items-center px-4 md:px-8 py-4 text-white'>
+			<div className='absolute top-0 left-0 w-full z-[100]'>
+				<div className='flex justify-between items-center px-4 md:px-8 lg:px-12 py-4 text-white lg:max-w-[1200px] mx-auto'>
 					<img src={Logo} alt='Netflix Logo' className='h-[20px] lg:h-[30px]' />
 					<span onClick={handleNav} className='text-[1.5rem] md:hidden'>
 						<HiOutlineMenuAlt3 />
 					</span>
 					<div className='hidden md:flex'>
-						<button className='text-xs lg:text-sm mr-4 px-6 py-2 rounded bg-gray-600/40 font-medium'>
+						<button className='text-xs mr-4 px-6 py-2 rounded bg-gray-600/40 font-medium'>
 							Sign In
 						</button>
-						<button className='bg-red-700 px-6 py-2 text-xs lg:text-sm font-medium rounded'>
+						<button className='bg-red-700 px-6 py-2 text-xs font-medium rounded'>
 							Sign Up
 						</button>
 					</div>
@@ -43,8 +43,8 @@ const Navbar = () => {
 								</span>
 							</div>
 							<div className='mt-20 flex flex-col items-center'>
-								<p className='p-4 font-bold text-[1.3rem] bg-red-700/70 w-[80%] m-auto text-center rounded-lg mb-[2rem]'>Sign In</p>
-								<p className='p-4 font-bold text-[1.3rem] bg-red-700/70 w-[80%] m-auto text-center rounded-lg'>Sign Up</p>
+								<p className='p-4 font-light text-[1.3rem] w-[80%] m-auto text-center rounded-lg mb-[2rem]'>Sign In</p>
+								<p className='p-4 font-light text-[1.3rem] w-[80%] m-auto text-center rounded-lg'>Sign Up</p>
 							</div>
 						</div>
 					</div>
