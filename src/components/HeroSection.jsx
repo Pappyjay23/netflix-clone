@@ -10,22 +10,23 @@ const HeroSection = () => {
 	const movie = movies[Math.floor(Math.random() * movies.length)];
 	useEffect(() => {
 		axios
+		// .get(movieRequests.getTopRatedShows)
 			.get(movieRequests.getNowPlayingMovies)
 			.then((resp) => {
 				setMovies(resp.data.results);
+				console.log(resp.data.results);
 			})
 			.catch((err) => console.log(err));
 	}, []);
 
 	return (
-		<div className='absolute top-0 left-0 w-full text-white'>
 			<div>
 				<img
 					className='h-[90vh] xxl:h-[70vh] sl:h-[50vh] w-full object-cover'
 					src={`https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`}
 					alt='Movie'
 				/>
-				<div className='bg-black/80 lg:bg-transparent lg:bg-gradient-to-r lg:from-black h-[90vh] absolute top-0 left-0 w-full'></div>
+				<div className='bg-black/80 h-[90vh] xxl:h-[70vh] sl:h-[50vh] absolute top-0 left-0 w-full'></div>
 				<div className="absolute top-[25%] w-full">
                 <div className='relative px-4 md:px-8 lg:px-12 lg:max-w-[1200px] mx-auto'>
 					<span>
@@ -53,7 +54,6 @@ const HeroSection = () => {
 				</div>
                 </div>
 			</div>
-		</div>
 	);
 };
 
