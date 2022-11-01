@@ -6,16 +6,8 @@ export const MovieRowData = [
         link: movieRequests.getNowPlayingMovies,
     },
     {
-        title: 'Critically Acclaimed TV Shows',
-        link: movieRequests.getTopRatedShows,
-    },
-    {
         title: 'Upcoming Movies',
         link: movieRequests.getUpcomingMovies,
-    },
-    {
-        title: 'Popular on Netflix',
-        link: movieRequests.getPopularMovies,
     },
     {
         title: 'Trending Now',
@@ -24,6 +16,14 @@ export const MovieRowData = [
     {
         title: 'Top Rated on Netflix',
         link: movieRequests.getTopRatedMovies,
+    },
+    {
+        title: 'Popular on Netflix',
+        link: movieRequests.getPopularMovies,
+    },
+    {
+        title: 'Critically Acclaimed TV Shows',
+        link: movieRequests.getTopRatedShows,
     },
     {
         title: 'Popular TV Shows',
