@@ -30,7 +30,7 @@ const Navbar = () => {
 							</button>
 						</Link>
 						<Link to='signUp'>
-							<button className='bg-red-700 px-6 py-2 text-xs font-medium rounded'>
+							<button onClick={handleNav} className='bg-red-700 px-6 py-2 text-xs font-medium rounded'>
 								Sign Up
 							</button>
 						</Link>
@@ -54,12 +54,12 @@ const Navbar = () => {
 								</span>
 							</div>
 							<div className='mt-20 flex flex-col items-center w-full'>
-								<Link to='/signIn'>
+								<Link to='/signIn' onClick={handleNav}>
 									<p className='p-4 font-light text-[1.3rem] w-full m-auto text-center rounded-lg mb-[2rem]'>
 										Sign In
 									</p>
 								</Link>
-								<Link to='/signUp'>
+								<Link to='/signUp' onClick={handleNav}>
 									<p className='p-4 font-light text-[1.3rem] w-full m-auto text-center rounded-lg'>
 										Sign Up
 									</p>
