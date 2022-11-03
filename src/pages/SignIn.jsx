@@ -1,8 +1,34 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContextUse } from "../context/authContext";
 import Logo from "../images/full-logo.png";
 
 const SignIn = () => {
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [error, setError] = useState("");
+	const [success, setSuccess] = useState("");
+
+	const { logIn } = AuthContextUse();
+	const navigate = useNavigate();
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		await logIn(email, password)
+			.then(() => {
+				setSuccess("Successful login");
+				setError("");
+				setTimeout(() => {
+					navigate("/");
+				}, 1000);
+			})
+			.catch((err) => {
+				const errMessg = err.message.slice(9);
+				setError(errMessg);
+				setSuccess('');
+			});
+	};
+
 	return (
 		<div className='absolute top-0 left-0 w-full h-full lg:min-h-fit lg:overflow-y-scroll lg:scrollbar-hide'>
 			<img
@@ -11,20 +37,30 @@ const SignIn = () => {
 				className='h-full w-full object-cover lg:block hidden'
 			/>
 			<div className='bg-black/70 left-0 w-full absolute top-0 h-full lg:block hidden'></div>
-			<div className='flex justify-center absolute left-0 lg:top-[15%] z-50 w-full text-white bg-black lg:bg-transparent h-full lg:h-fit lg:max-h-[80%]'>
-				<div className='bg-black/70 lg:w-[35%] md:w-[60%] w-full py-[3rem]'>
+			<div className='flex justify-center absolute left-0 lg:top-[15%] z-50 w-full text-white bg-black lg:bg-transparent h-full lg:h-fit lg:max-h-[90%]'>
+				<div className='bg-black/70 lg:w-[35%] md:w-[60%] w-full py-[5rem] lg:py-[2rem]'>
 					<div className='w-[80%] mx-auto'>
-						<div className='flex justify-center mb-8'>
-							<img src={Logo} alt='Logo' className='h-[40px] hidden lg:block' />
+						<div className='flex justify-center mb-4'>
+							<img src={Logo} alt='Logo' className='h-[30px] hidden lg:block' />
 						</div>
-						<p className='mb-8 text-3xl font-bold text-center'>Sign In</p>
-						<form className='flex flex-col'>
+						<p className='mb-4 text-3xl font-bold text-center'>Sign In</p>
+						{(error && !success) && (
+							<p className='mb-4 text-center text-sm p-2 bg-red-700'>{error}</p>
+						)}
+						{(success && !error) && (
+							<p className='mb-4 text-center text-sm p-2 bg-green-700'>
+								{success}
+							</p>
+						)}
+						<form onSubmit={handleSubmit} className='flex flex-col'>
 							<input
+								onChange={(e) => setEmail(e.target.value)}
 								className='mb-4 px-2 py-3 rounded bg-gray-700 outline-none text-xs md:text-sm'
 								type='email'
 								placeholder='Email'
 							/>
 							<input
+								onChange={(e) => setPassword(e.target.value)}
 								className='mb-4 px-2 py-3 rounded bg-gray-700 outline-none text-xs md:text-sm'
 								type='password'
 								placeholder='Password'

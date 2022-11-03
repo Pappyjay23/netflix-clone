@@ -4,10 +4,12 @@ import { MdDoneAll } from "react-icons/md";
 import { BsFillPlayFill } from "react-icons/bs";
 import axios from "axios";
 import { key } from "../config/requests";
+import { AuthContextUse } from "../context/authContext";
 
 const Movie = ({ item }) => {
 	const [addMovie, setAddMovie] = useState(false);
 	const [trailer, setTrailer] = useState();
+	const {setMovie} = AuthContextUse()
 
 	const dateReleased = () => {
 		if (item?.release_date || item?.first_air_date) {
@@ -15,6 +17,10 @@ const Movie = ({ item }) => {
 			return date.slice(0, 4);
 		}
 	};
+
+	const changeMovie = () =>{
+		setMovie(item)
+	}
 
 	const getMovie = async (id) => {
 		if (item?.release_date) {
@@ -35,11 +41,9 @@ const Movie = ({ item }) => {
 				)
 				.then((resp) => {
 					let res = resp.data.results;
-					console.log(res)
-					setTrailer(
-						res.find((item) => item.name.includes("Official"))
-					);
-					console.log(trailer)
+					console.log(res);
+					setTrailer(res.find((item) => item.name.includes("Official")));
+					console.log(trailer);
 					// window.location.href = `https://www.youtube.com/watch?v=${trailer.key}`;
 				})
 				.catch((err) => console.log(err));
@@ -47,7 +51,7 @@ const Movie = ({ item }) => {
 	};
 
 	return (
-		<div className='relative cursor-pointer block h-[200px] w-[120px] lg:h-[300px] lg:w-[200px] flex-shrink-0 scale-[.85] hover:scale-100 duration-500 group/movie'>
+		<div onClick={changeMovie} className='relative cursor-pointer block h-[200px] w-[120px] lg:h-[300px] lg:w-[200px] flex-shrink-0 scale-[.85] hover:scale-100 duration-500 group/movie'>
 			<img
 				src={`https://image.tmdb.org/t/p/original/${item?.poster_path}`}
 				alt='Movie'
@@ -60,13 +64,15 @@ const Movie = ({ item }) => {
 			/>
 			<div className='absolute top-0 left-0 bg-black/60 w-full h-full hidden group-hover/movie:flex'></div>
 			<div className='absolute top-0 left-0 h-full w-full lg:p-4 p-2 opacity-0 group-hover/movie:opacity-100'>
-				<div onClick={() => getMovie(item?.id)} className='flex justify-end'>
+				<div className='flex justify-end'>
 					<span
 						onClick={() => setAddMovie(!addMovie)}
 						className='bg-gray-500/40 p-2 mr-2'>
 						{addMovie ? <MdDoneAll /> : <IoMdAdd />}
 					</span>
-					<span className='bg-gray-500/40 p-2'>
+					<span
+						onClick={() => getMovie(item?.id)}
+						className='bg-gray-500/40 p-2'>
 						<BsFillPlayFill />
 					</span>
 				</div>

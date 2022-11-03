@@ -4,14 +4,15 @@ import { key, movieRequests } from "../config/requests";
 import Logo from "../images/logo.png";
 import { BsFillPlayFill } from "react-icons/bs";
 import { MdLibraryAdd } from "react-icons/md";
-import { MovieContexts } from "../context/movieContext";
 import { Link } from "react-router-dom";
+import { AuthContextUse } from "../context/authContext";
 
 const HeroSection = () => {
 	const [movies, setMovies] = useState([]);
 	const [trailer, setTrailer] = useState();
+	const { user } = AuthContextUse();
 	const movie = movies[Math.floor(Math.random() * movies.length)];
-	// const { movie, setMovie } = MovieContexts();
+
 	const truncate = (str, no) => {
 		if (str?.length > no) {
 			return str.slice(0, no) + "....";
@@ -36,13 +37,15 @@ const HeroSection = () => {
 			)
 			.then((resp) => {
 				let res = resp.data.results;
-				setTrailer(res.find((item) => item.name === 'Official Trailer' ))
-				window.location.href = `https://www.youtube.com/watch?v=${trailer.key}`
+				setTrailer(res.find((item) => item.name === "Official Trailer"));
+				window.location.href = `https://www.youtube.com/watch?v=${trailer.key}`;
 			})
 			.catch((err) => console.log(err));
 	};
+
 	useEffect(() => {
 		getMovies();
+		// setMovie(movies && movies[Math.floor(Math.random() * movies.length)]);
 	}, []);
 
 	return (
@@ -67,14 +70,14 @@ const HeroSection = () => {
 							className='text-xs mr-4 px-6 py-2 rounded bg-gray-100/10 font-medium flex items-center'>
 							<span className='mr-1'>
 								<BsFillPlayFill />
-							</span>{" "}
+							</span>
 							Play
 						</button>
-						<Link to='/myList'>
+						<Link to={user ? "/myList" : "/signIn"}>
 							<button className='text-xs mr-4 px-6 py-2 rounded bg-gray-100/10 font-medium flex items-center'>
 								<span className='text-white mr-2'>
 									<MdLibraryAdd />
-								</span>{" "}
+								</span>
 								My List
 							</button>
 						</Link>

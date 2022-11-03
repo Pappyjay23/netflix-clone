@@ -2,13 +2,28 @@ import React, { useState } from "react";
 import Logo from "../images/full-logo.png";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import { FaTimes } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContextUse } from "../context/authContext";
 
 const Navbar = () => {
 	const [nav, setNav] = useState(false);
+	const { user, logOut } = AuthContextUse();
+	const navigate = useNavigate();
+
 	const handleNav = () => {
 		setNav(!nav);
 	};
+
+	const handleSignOut = async () => {
+		await logOut()
+			.then(() => {
+				navigate("/");
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
 	return (
 		<>
 			<div className='absolute top-0 left-0 w-full z-[100]'>
@@ -23,18 +38,33 @@ const Navbar = () => {
 					<span onClick={handleNav} className='text-[1.5rem] md:hidden'>
 						<HiOutlineMenuAlt3 />
 					</span>
-					<div className='hidden md:flex'>
-						<Link to='signIn'>
-							<button className='text-xs mr-4 px-6 py-2 rounded bg-gray-600/40 font-medium'>
-								Sign In
+					{user ? (
+						<div className='hidden md:flex'>
+							<Link to='/myList'>
+								<button className='text-xs mr-4 px-6 py-2 rounded bg-gray-600/40 font-medium'>
+									My List
+								</button>
+							</Link>
+							<button
+								onClick={handleSignOut}
+								className='bg-red-700 px-6 py-2 text-xs font-medium rounded'>
+								Logout
 							</button>
-						</Link>
-						<Link to='signUp'>
-							<button onClick={handleNav} className='bg-red-700 px-6 py-2 text-xs font-medium rounded'>
-								Sign Up
-							</button>
-						</Link>
-					</div>
+						</div>
+					) : (
+						<div className='hidden md:flex'>
+							<Link to='signIn'>
+								<button className='text-xs mr-4 px-6 py-2 rounded bg-gray-600/40 font-medium'>
+									Sign In
+								</button>
+							</Link>
+							<Link to='signUp'>
+								<button className='bg-red-700 px-6 py-2 text-xs font-medium rounded'>
+									Sign Up
+								</button>
+							</Link>
+						</div>
+					)}
 				</div>
 				<div
 					className={`fixed top-0 ${
@@ -53,18 +83,35 @@ const Navbar = () => {
 									<FaTimes />
 								</span>
 							</div>
-							<div className='mt-20 flex flex-col items-center w-full'>
-								<Link to='/signIn' onClick={handleNav}>
-									<p className='p-4 font-light text-[1.3rem] w-full m-auto text-center rounded-lg mb-[2rem]'>
-										Sign In
-									</p>
-								</Link>
-								<Link to='/signUp' onClick={handleNav}>
-									<p className='p-4 font-light text-[1.3rem] w-full m-auto text-center rounded-lg'>
-										Sign Up
-									</p>
-								</Link>
-							</div>
+							{user ? (
+								<div className='mt-20 flex flex-col items-center w-full'>
+									<Link to='/myList' onClick={handleNav}>
+										<p className='p-4 font-light text-[1.3rem] w-full m-auto text-center rounded-lg mb-[2rem]'>
+											My List
+										</p>
+									</Link>
+									<button onClick={handleSignOut}>
+										<p
+											onClick={handleNav}
+											className='p-4 font-light text-[1.3rem] w-full m-auto text-center rounded-lg'>
+											Logout
+										</p>
+									</button>
+								</div>
+							) : (
+								<div className='mt-20 flex flex-col items-center w-full'>
+									<Link to='/signIn' onClick={handleNav}>
+										<p className='p-4 font-light text-[1.3rem] w-full m-auto text-center rounded-lg mb-[2rem]'>
+											Sign In
+										</p>
+									</Link>
+									<Link to='/signUp' onClick={handleNav}>
+										<p className='p-4 font-light text-[1.3rem] w-full m-auto text-center rounded-lg'>
+											Sign Up
+										</p>
+									</Link>
+								</div>
+							)}
 						</div>
 					</div>
 				</div>
