@@ -8,18 +8,19 @@ import { AuthContextUse } from "../context/authContext";
 const MyList = () => {
 	const { saved, setSaved } = AuthContextUse();
 	const { user } = AuthContextUse();
-	const getSaved = () => {
-		if (user?.email) {
-			onSnapshot(doc(db, "users", user?.email), (doc) => {
-				setSaved(doc.data()?.savedShows);
-			});	
-		}
-	};
-
+	
 	useEffect(() => {
-		getSaved();
-
-	}, [user?.email]);
+		const getSaved = () => {
+			if (user?.email) {
+				onSnapshot(doc(db, "users", user?.email), (doc) => {
+					setSaved(doc.data()?.savedShows);
+				});
+			}
+		};
+		return () => {
+			getSaved();
+		};
+	}, [user?.email, setSaved]);
 
 	return (
 		<div className='h-screen absolute top-0 left-0 w-full text-white bg-black'>
