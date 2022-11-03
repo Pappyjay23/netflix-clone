@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-import { IoMdAdd } from "react-icons/io";
+import { IoMdAdd, IoMdClose } from "react-icons/io";
 import { MdDoneAll } from "react-icons/md";
 import { BsFillPlayFill } from "react-icons/bs";
 import axios from "axios";
 import { key } from "../config/requests";
 import { AuthContextUse } from "../context/authContext";
+import { useNavigate } from "react-router-dom";
 
-const Movie = ({ item }) => {
+const Movie = ({ item, close }) => {
 	const [addMovie, setAddMovie] = useState(false);
 	const [trailer, setTrailer] = useState();
-	const {setMovie} = AuthContextUse()
+	const { user, setMovie } = AuthContextUse();
+	const navigate = useNavigate()
 
 	const dateReleased = () => {
 		if (item?.release_date || item?.first_air_date) {
@@ -18,8 +20,16 @@ const Movie = ({ item }) => {
 		}
 	};
 
-	const changeMovie = () =>{
-		setMovie(item)
+	const changeMovie = () => {
+		setMovie(item);
+	};
+
+	const checkAddMovie = () =>{
+		if(user){
+			setAddMovie(!addMovie)
+		}else{
+			navigate('/signIn')
+		}
 	}
 
 	const getMovie = async (id) => {
@@ -51,7 +61,9 @@ const Movie = ({ item }) => {
 	};
 
 	return (
-		<div onClick={changeMovie} className='relative cursor-pointer block h-[200px] w-[120px] lg:h-[300px] lg:w-[200px] flex-shrink-0 scale-[.85] hover:scale-100 duration-500 group/movie'>
+		<div
+			onClick={close ? null : changeMovie}
+			className='relative cursor-pointer block h-[200px] w-[120px] lg:h-[300px] lg:w-[200px] flex-shrink-0 scale-[.85] hover:scale-100 duration-500 group/movie'>
 			<img
 				src={`https://image.tmdb.org/t/p/original/${item?.poster_path}`}
 				alt='Movie'
@@ -65,11 +77,18 @@ const Movie = ({ item }) => {
 			<div className='absolute top-0 left-0 bg-black/60 w-full h-full hidden group-hover/movie:flex'></div>
 			<div className='absolute top-0 left-0 h-full w-full lg:p-4 p-2 opacity-0 group-hover/movie:opacity-100'>
 				<div className='flex justify-end'>
-					<span
-						onClick={() => setAddMovie(!addMovie)}
-						className='bg-gray-500/40 p-2 mr-2'>
-						{addMovie ? <MdDoneAll /> : <IoMdAdd />}
-					</span>
+					{close ? (
+						<span
+							className='bg-gray-500/40 p-2 mr-2'>
+							<IoMdClose />
+						</span>
+					) : (
+						<span
+							onClick={checkAddMovie}
+							className='bg-gray-500/40 p-2 mr-2'>
+							{addMovie ? <MdDoneAll /> : <IoMdAdd />}
+						</span>
+					)}
 					<span
 						onClick={() => getMovie(item?.id)}
 						className='bg-gray-500/40 p-2'>
