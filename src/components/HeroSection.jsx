@@ -4,13 +4,14 @@ import { key, movieRequests } from "../config/requests";
 import Logo from "../images/logo.png";
 import { BsFillPlayFill } from "react-icons/bs";
 import { MdLibraryAdd } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContextUse } from "../context/authContext";
 
 const HeroSection = () => {
 	const [movies, setMovies] = useState([]);
 	const [trailer, setTrailer] = useState();
 	const { user } = AuthContextUse();
+	const navigate = useNavigate()
 	const movie = movies[Math.floor(Math.random() * movies.length)];
 
 	const truncate = (str, no) => {
@@ -38,14 +39,15 @@ const HeroSection = () => {
 			.then((resp) => {
 				let res = resp.data.results;
 				setTrailer(res.find((item) => item.name === "Official Trailer"));
-				window.location.href = `https://www.youtube.com/watch?v=${trailer.key}`;
 			})
 			.catch((err) => console.log(err));
 	};
+	
+	trailer &&
+		(window.location.href = `https://www.youtube.com/watch?v=${trailer?.key}`);
 
 	useEffect(() => {
 		getMovies();
-		// setMovie(movies && movies[Math.floor(Math.random() * movies.length)]);
 	}, []);
 
 	return (
@@ -66,7 +68,7 @@ const HeroSection = () => {
 					</p>
 					<div className='flex mb-4'>
 						<button
-							onClick={() => getMovie(movie?.id)}
+						onClick={() => (user ? getMovie(movie?.id) : navigate("/signIn"))}
 							className='text-xs mr-4 px-6 py-2 rounded bg-gray-100/10 font-medium flex items-center'>
 							<span className='mr-1'>
 								<BsFillPlayFill />

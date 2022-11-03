@@ -16,8 +16,8 @@ const SignUp = () => {
 		e.preventDefault();
 		await signUp(email, password)
 			.then(() => {
-				setSuccess("Successful sign up");
 				setError("");
+				setSuccess("Successful signup");
 				setTimeout(() => {
 					navigate("/");
 				}, 1000);
@@ -25,7 +25,7 @@ const SignUp = () => {
 			.catch((err) => {
 				const errMessg = err.message.slice(9);
 				setError(errMessg);
-				setSuccess('');
+				setSuccess("");
 			});
 	};
 
@@ -44,10 +44,10 @@ const SignUp = () => {
 							<img src={Logo} alt='Logo' className='h-[30px] hidden lg:block' />
 						</div>
 						<p className='mb-4 text-3xl font-bold text-center'>Sign Up</p>
-						{(error && !success) && (
+						{error && !success && (
 							<p className='mb-4 text-center text-sm p-2 bg-red-700'>{error}</p>
 						)}
-						{(success && !error) && (
+						{success && !error && (
 							<p className='mb-4 text-center text-sm p-2 bg-green-700'>
 								{success}
 							</p>

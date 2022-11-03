@@ -4,16 +4,22 @@ import {
 	signInWithEmailAndPassword,
 	signOut,
 } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 import { createContext, useContext, useEffect, useState } from "react";
-import { auth } from "../config/firebase";
+import { auth, db } from "../config/firebase";
 
 const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
 	const [user, setUser] = useState();
 	const [movie, setMovie] = useState({});
+	const [saved, setSaved] = useState([]);
 
-	const signUp = (email, password) => {
+	const signUp = async (email, password) => {
+		const movieRef = doc(db, "users", email);
+		await setDoc(movieRef, {
+			savedShows: [],
+		});
 		return createUserWithEmailAndPassword(auth, email, password);
 	};
 	const logIn = (email, password) => {
@@ -23,8 +29,6 @@ export const AuthContextProvider = ({ children }) => {
 		return signOut(auth);
 	};
 
-
-	
 	useEffect(() => {
 		const getUser = onAuthStateChanged(auth, (resp) => {
 			setUser(resp);
@@ -33,7 +37,16 @@ export const AuthContextProvider = ({ children }) => {
 			getUser();
 		};
 	});
-	const values = { user, signUp, logIn, logOut, movie, setMovie };
+	const values = {
+		user,
+		signUp,
+		logIn,
+		logOut,
+		movie,
+		setMovie,
+		saved,
+		setSaved,
+	};
 	return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
 };
 
