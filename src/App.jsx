@@ -12,7 +12,6 @@ const App = () => {
 	return (
 		<>
 			<AuthContextProvider>
-				{/* <MovieContextProvider> */}
 				<Router>
 					<Navbar />
 					<Routes>
@@ -29,7 +28,6 @@ const App = () => {
 						<Route path='/signUp' element={<SignUp />} />
 					</Routes>
 				</Router>
-				{/* </MovieContextProvider> */}
 			</AuthContextProvider>
 		</>
 	);

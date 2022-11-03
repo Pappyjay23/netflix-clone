@@ -64,10 +64,6 @@ const Movie = ({ item }) => {
 		}
 	};
 
-	// const changeMovie = () => {
-	// 	setMovie(item);
-	// };
-
 	const getMovie = async (id) => {
 		if (item?.release_date) {
 			await axios
