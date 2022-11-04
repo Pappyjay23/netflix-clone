@@ -6,12 +6,14 @@ import { BsFillPlayFill } from "react-icons/bs";
 import { MdLibraryAdd } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContextUse } from "../context/authContext";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 const HeroSection = () => {
 	const [movies, setMovies] = useState([]);
 	const [trailer, setTrailer] = useState();
 	const { user } = AuthContextUse();
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 	const movie = movies[Math.floor(Math.random() * movies.length)];
 
 	const truncate = (str, no) => {
@@ -42,7 +44,7 @@ const HeroSection = () => {
 			})
 			.catch((err) => console.log(err));
 	};
-	
+
 	trailer &&
 		(window.location.href = `https://www.youtube.com/watch?v=${trailer?.key}`);
 
@@ -52,11 +54,17 @@ const HeroSection = () => {
 
 	return (
 		<div>
-			<img
-				className='h-[90vh] xxl:h-[70vh] sl:h-[50vh] w-full object-cover'
-				src={`https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`}
-				alt='Movie'
-			/>
+			<div className='w-full h-full'>
+				<LazyLoadImage
+					width={"100%"}
+					height={'85vh'}
+					effect='blur'
+					className='h-[90vh] xxl:h-[70vh] sl:h-[50vh] w-full object-cover'
+					src={`https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`}
+					placeholderSrc={`https://cdn-images-1.medium.com/freeze/max/27/1*sg-uLNm73whmdOgKlrQdZA.jpeg?q=20`}
+					alt='Movie'
+				/>
+			</div>
 			<div className='bg-black/80 h-[90vh] xxl:h-[70vh] sl:h-[50vh] absolute top-0 left-0 w-full'></div>
 			<div className='absolute top-[18%] lg:top-[25%] w-full'>
 				<div className='relative px-4 md:px-8 lg:px-12 lg:max-w-[1200px] mx-auto'>
@@ -68,7 +76,7 @@ const HeroSection = () => {
 					</p>
 					<div className='flex mb-4'>
 						<button
-						onClick={() => (user ? getMovie(movie?.id) : navigate("/signIn"))}
+							onClick={() => (user ? getMovie(movie?.id) : navigate("/signIn"))}
 							className='text-xs mr-4 px-6 py-2 rounded bg-gray-100/10 font-medium flex items-center'>
 							<span className='mr-1'>
 								<BsFillPlayFill />

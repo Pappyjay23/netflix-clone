@@ -4,6 +4,8 @@ import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import { FaTimes } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContextUse } from "../context/authContext";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 const Navbar = () => {
 	const [nav, setNav] = useState(false);
@@ -29,7 +31,10 @@ const Navbar = () => {
 			<div className='absolute top-0 left-0 w-full z-[100]'>
 				<div className='flex justify-between items-center px-4 md:px-8 lg:px-12 py-4 text-white lg:max-w-[1200px] mx-auto'>
 					<Link to='/'>
-						<img
+						<LazyLoadImage
+							effect='blur'
+							height={"100%"}
+							width={"100%"}
 							src={Logo}
 							alt='Netflix Logo'
 							className='h-[20px] lg:h-[30px]'
