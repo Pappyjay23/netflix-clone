@@ -28,7 +28,7 @@ const MyList = () => {
 		<div className='h-screen absolute top-0 left-0 w-full text-white bg-black'>
 			<LazyLoadImage
 				effect='blur'
-				width={'100%'}
+				width={"100%"}
 				className='h-[70vh] xxl:h-[50vh] sl:h-[30vh] w-full object-cover'
 				src='https://assets.nflxext.com/ffe/siteui/vlv3/79fe83d4-7ef6-4181-9439-46db72599559/3941ce64-4089-4fbc-b34a-f9faa7209071/NG-en-20221017-popsignuptwoweeks-perspective_alpha_website_large.jpg'
 				alt='Movie'
