@@ -94,7 +94,7 @@ const Movie = ({ item }) => {
 	};
 
 	return (
-		<div className='relative cursor-pointer block h-[200px] w-[120px] lg:h-[300px] lg:w-[200px] flex-shrink-0 scale-[.85] hover:scale-100 duration-500 group/movie'>
+		<div onClick={() => (user ? getMovie(item?.id) : navigate("/signIn"))} className='relative cursor-pointer block h-[200px] w-[120px] lg:h-[300px] lg:w-[200px] flex-shrink-0 scale-[.85] hover:scale-100 duration-500 group/movie'>
 			<img
 				src={`https://image.tmdb.org/t/p/original/${item?.poster_path}`}
 				alt='Movie'
