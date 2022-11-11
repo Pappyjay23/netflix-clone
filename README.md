@@ -1,8 +1,6 @@
 <div align="center">
 	<h1> Netflix- Watch Tv Shows Online, Watch Movies Online</h1>
-[![Netlify Status](https://api.netlify.com/api/v1/badges/d3103f9b-ea1b-47ca-8619-44f1c7794956/deploy-status)]https://app.netlify.com/sites/netflix-vp/deploys)
 </div>
-[![Netlify Status](https://api.netlify.com/api/v1/badges/d3103f9b-ea1b-47ca-8619-44f1c7794956/deploy-status)](https://app.netlify.com/sites/netflix-vp/deploys)
 ## Tech Stack ✨
 
 - [React.js](https://reactjs.org/) - UI Library
