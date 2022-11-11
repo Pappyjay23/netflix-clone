@@ -1,6 +1,7 @@
 <div align="center">
 	<h1> Netflix- Watch Tv Shows Online, Watch Movies Online</h1>
 </div>
+
 ## Tech Stack ✨
 
 - [React.js](https://reactjs.org/) - UI Library
