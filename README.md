@@ -2,6 +2,10 @@
 	<h1> Netflix- Watch Tv Shows Online, Watch Movies Online</h1>
 </div>
 
+## Snapshots 📸
+
+![Snapshot of Netflix](public/Snapshot.png)
+
 ## Tech Stack ✨
 
 - [React.js](https://reactjs.org/) - UI Library
