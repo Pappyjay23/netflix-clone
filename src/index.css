@@ -6,5 +6,23 @@
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
-	font-family: 'Raleway', sans-serif;
+	font-family: "Raleway", sans-serif;
+}
+
+body::-webkit-scrollbar {
+	width: 6px;
+	height: 8px;
+}
+
+body::-webkit-scrollbar-track {
+	background: black;
+}
+
+body::-webkit-scrollbar-thumb {
+	border-radius: 100vh;
+	background: rgb(185 28 28);
+}
+
+body::-webkit-scrollbar-thumb:hover {
+	background: rgb(185 28 28 / 0.6);
 }
