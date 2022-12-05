@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { MdDoneAll } from "react-icons/md";
 import { BsFillPlayFill } from "react-icons/bs";
@@ -64,29 +64,36 @@ const Movie = ({ item }) => {
 		}
 	};
 
-	const getMovie = async (id) => {
-		if (item?.release_date) {
-			await axios
-				.get(
-					`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${key}&language=en-US`
-				)
-				.then((resp) => {
-					let res = resp.data.results;
-					setTrailer(res.find((item) => item.name === "Official Trailer"));
-				})
-				.catch((err) => console.log(err));
-		} else if (item?.first_air_date) {
-			await axios
-				.get(
-					`https://api.themoviedb.org/3/tv/${id}/videos?api_key=${key}&language=en-US`
-				)
-				.then((resp) => {
-					let res = resp.data.results;
-					console.log(res);
-					setTrailer(res.find((item) => item.name.includes("Official")));
-				})
-				.catch((err) => console.log(err));
-		}
+	useEffect(() => {
+		const fetchMovie = async (id) => {
+			if (item?.release_date) {
+				await axios
+					.get(
+						`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${key}&language=en-US`
+					)
+					.then((resp) => {
+						let res = resp.data.results;
+						setTrailer(res.find((item) => item.name === "Official Trailer"));
+					})
+					.catch((err) => console.log(err));
+			} else if (item?.first_air_date) {
+				await axios
+					.get(
+						`https://api.themoviedb.org/3/tv/${id}/videos?api_key=${key}&language=en-US`
+					)
+					.then((resp) => {
+						let res = resp.data.results;
+						setTrailer(res.find((item) => item.name.includes("Official")));
+					})
+					.catch((err) => console.log(err));
+			}
+		};
+		fetchMovie(item?.id);
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [trailer]);
+
+	const getMovie = () => {
 		return (
 			trailer &&
 			(window.location.href = `https://www.youtube.com/watch?v=${trailer?.key}`)
@@ -94,7 +101,9 @@ const Movie = ({ item }) => {
 	};
 
 	return (
-		<div onClick={() => (user ? getMovie(item?.id) : navigate("/signIn"))} className='relative cursor-pointer block h-[200px] w-[120px] lg:h-[300px] lg:w-[200px] flex-shrink-0 scale-[.85] hover:scale-100 duration-500 group/movie'>
+		<div
+			onClick={() => (user ? getMovie(item?.id) : navigate("/signIn"))}
+			className='relative cursor-pointer block h-[200px] w-[120px] lg:h-[300px] lg:w-[200px] flex-shrink-0 scale-[.85] hover:scale-100 duration-500 group/movie'>
 			<img
 				src={`https://image.tmdb.org/t/p/original/${item?.poster_path}`}
 				alt='Movie'

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { doc, updateDoc } from "firebase/firestore";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsFillPlayFill } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
 import { db } from "../config/firebase";
@@ -13,29 +13,37 @@ const SavedShows = ({ item }) => {
 	const [trailer, setTrailer] = useState();
 	const { user, saved } = AuthContextUse();
 
-	const getMovie = async (id) => {
-		if (item?.dateM) {
-			await axios
-				.get(
-					`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${key}&language=en-US`
-				)
-				.then((resp) => {
-					let res = resp.data.results;
-					setTrailer(res.find((item) => item.name === "Official Trailer"));
-				})
-				.catch((err) => console.log(err));
-		} else if (item?.dateS) {
-			await axios
-				.get(
-					`https://api.themoviedb.org/3/tv/${id}/videos?api_key=${key}&language=en-US`
-				)
-				.then((resp) => {
-					let res = resp.data.results;
-					console.log(res);
-					setTrailer(res.find((item) => item.name.includes("Official")));
-				})
-				.catch((err) => console.log(err));
-		}
+	useEffect(() => {
+		const fetchMovie = async (id) => {
+			if (item?.dateM) {
+				await axios
+					.get(
+						`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${key}&language=en-US`
+					)
+					.then((resp) => {
+						let res = resp.data.results;
+						setTrailer(res.find((item) => item.name === "Official Trailer"));
+					})
+					.catch((err) => console.log(err));
+			} else if (item?.dateS) {
+				await axios
+					.get(
+						`https://api.themoviedb.org/3/tv/${id}/videos?api_key=${key}&language=en-US`
+					)
+					.then((resp) => {
+						let res = resp.data.results;
+						console.log(res);
+						setTrailer(res.find((item) => item.name.includes("Official")));
+					})
+					.catch((err) => console.log(err));
+			}
+		};
+		fetchMovie(item?.id);
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [trailer]);
+
+	const getMovie = () => {
 		return (
 			trailer &&
 			(window.location.href = `https://www.youtube.com/watch?v=${trailer?.key}`)
@@ -63,8 +71,8 @@ const SavedShows = ({ item }) => {
 			className='relative cursor-pointer block h-[200px] w-[120px] lg:h-[300px] lg:w-[200px] flex-shrink-0 scale-[.85] hover:scale-100 duration-500 group/movie'>
 			<LazyLoadImage
 				effect='blur'
-				height={'100%'}
-				width={'100%'}
+				height={"100%"}
+				width={"100%"}
 				src={`https://image.tmdb.org/t/p/original/${item?.poster}`}
 				alt='Movie'
 				className='h-full w-full object-cover rounded-lg block'

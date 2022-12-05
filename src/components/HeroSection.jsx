@@ -33,6 +33,10 @@ const HeroSection = () => {
 			.catch((err) => console.log(err));
 	};
 
+	useEffect(() => {
+		getMovies();
+	}, []);
+
 	const getMovie = async (id) => {
 		await axios
 			.get(
@@ -48,16 +52,12 @@ const HeroSection = () => {
 	trailer &&
 		(window.location.href = `https://www.youtube.com/watch?v=${trailer?.key}`);
 
-	useEffect(() => {
-		getMovies();
-	}, []);
-
 	return (
 		<div>
 			<div className='w-full h-full'>
 				<LazyLoadImage
 					width={"100%"}
-					height={'85vh'}
+					height={"85vh"}
 					effect='blur'
 					className='h-[90vh] xxl:h-[70vh] sl:h-[50vh] w-full object-cover'
 					src={`https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`}
