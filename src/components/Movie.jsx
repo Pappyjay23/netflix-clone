@@ -22,6 +22,42 @@ const Movie = ({ item }) => {
 		}
 	};
 
+	useEffect(() => {
+		const fetchMovie = async (id) => {
+			if (item?.release_date) {
+				await axios
+					.get(
+						`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${key}&language=en-US`
+					)
+					.then((resp) => {
+						let res = resp.data.results;
+						setTrailer(res.find((item) => item.name === "Official Trailer"));
+					})
+					.catch((err) => console.log(err));
+			} else if (item?.first_air_date) {
+				await axios
+					.get(
+						`https://api.themoviedb.org/3/tv/${id}/videos?api_key=${key}&language=en-US`
+					)
+					.then((resp) => {
+						let res = resp.data.results;
+						setTrailer(res.find((item) => item.name.includes("Official")));
+					})
+					.catch((err) => console.log(err));
+			}
+		};
+		fetchMovie(item?.id);
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [trailer]);
+
+	const getMovie = () => {
+		return (
+			trailer &&
+			(window.location.href = `https://www.youtube.com/watch?v=${trailer?.key}`)
+		);
+	};
+
 	const addToList = async () => {
 		try {
 			setAddMovie(true);
@@ -64,46 +100,8 @@ const Movie = ({ item }) => {
 		}
 	};
 
-	useEffect(() => {
-		const fetchMovie = async (id) => {
-			if (item?.release_date) {
-				await axios
-					.get(
-						`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${key}&language=en-US`
-					)
-					.then((resp) => {
-						let res = resp.data.results;
-						setTrailer(res.find((item) => item.name === "Official Trailer"));
-					})
-					.catch((err) => console.log(err));
-			} else if (item?.first_air_date) {
-				await axios
-					.get(
-						`https://api.themoviedb.org/3/tv/${id}/videos?api_key=${key}&language=en-US`
-					)
-					.then((resp) => {
-						let res = resp.data.results;
-						setTrailer(res.find((item) => item.name.includes("Official")));
-					})
-					.catch((err) => console.log(err));
-			}
-		};
-		fetchMovie(item?.id);
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [trailer]);
-
-	const getMovie = () => {
-		return (
-			trailer &&
-			(window.location.href = `https://www.youtube.com/watch?v=${trailer?.key}`)
-		);
-	};
-
 	return (
-		<div
-			onClick={() => (user ? getMovie(item?.id) : navigate("/signIn"))}
-			className='relative cursor-pointer block h-[200px] w-[120px] lg:h-[300px] lg:w-[200px] flex-shrink-0 scale-[.85] hover:scale-100 duration-500 group/movie'>
+		<div className='relative cursor-pointer block h-[200px] w-[120px] lg:h-[300px] lg:w-[200px] flex-shrink-0 scale-[.85] hover:scale-100 duration-500 group/movie'>
 			<img
 				src={`https://image.tmdb.org/t/p/original/${item?.poster_path}`}
 				alt='Movie'
@@ -117,11 +115,11 @@ const Movie = ({ item }) => {
 			<div className='absolute top-0 left-0 bg-black/60 w-full h-full hidden group-hover/movie:flex'></div>
 			<div className='absolute top-0 left-0 h-full w-full lg:p-4 p-2 opacity-0 group-hover/movie:opacity-100'>
 				<div className='flex justify-end'>
-					{
-						<span onClick={checkAddMovie} className='bg-gray-500/40 p-2 mr-2'>
-							{addMovie ? <MdDoneAll /> : <IoMdAdd />}
-						</span>
-					}
+					<span
+						onClick={() => (user ? checkAddMovie() : navigate("/signIn"))}
+						className='bg-gray-500/40 p-2 mr-2'>
+						{addMovie ? <MdDoneAll /> : <IoMdAdd />}
+					</span>
 					<span
 						onClick={() => (user ? getMovie(item?.id) : navigate("/signIn"))}
 						className='bg-gray-500/40 p-2'>
