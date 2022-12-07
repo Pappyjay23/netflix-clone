@@ -13,7 +13,7 @@ const Movie = ({ item }) => {
 	const [addMovie, setAddMovie] = useState(false);
 	const [trailer, setTrailer] = useState();
 	const { user } = AuthContextUse();
-	const navigate = useNavigate();
+	const navigate = useNavigate(); 
 
 	const dateReleased = () => {
 		if (item?.release_date || item?.first_air_date) {
