@@ -80,7 +80,7 @@ const SignIn = () => {
 						</div>
 						<div className='flex text-xs md:text-sm mt-8'>
 							<span className='text-gray-500'>
-								Already subscribed to Netflix?
+								Don't have a Netflix account?
 							</span>
 							<Link to='/signUp'>
 								<p className='ml-2'>Sign Up</p>
