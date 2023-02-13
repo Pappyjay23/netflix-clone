@@ -53,20 +53,18 @@ const HeroSection = () => {
 		(window.location.href = `https://www.youtube.com/watch?v=${trailer?.key}`);
 
 	return (
-		<div>
-			<div className='w-full h-full'>
-				<LazyLoadImage
-					width={"100%"}
-					height={"85vh"}
-					effect='blur'
-					className='h-[90vh] xxl:h-[70vh] sl:h-[50vh] w-full object-cover'
-					src={`https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`}
-					placeholderSrc={`https://cdn-images-1.medium.com/freeze/max/27/1*sg-uLNm73whmdOgKlrQdZA.jpeg?q=20`}
-					alt='Movie'
-				/>
-			</div>
+		<>
+			<LazyLoadImage
+				width={"100%"}
+				// height={"85vh"}
+				effect='blur'
+				className='h-[90vh] xxl:h-[70vh] sl:h-[50vh] w-full object-cover'
+				src={`https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`}
+				placeholderSrc={`https://cdn-images-1.medium.com/freeze/max/27/1*sg-uLNm73whmdOgKlrQdZA.jpeg?q=20`}
+				alt='Movie'
+			/>
 			<div className='bg-black/80 h-[90vh] xxl:h-[70vh] sl:h-[50vh] absolute top-0 left-0 w-full'></div>
-			<div className='absolute top-[18%] lg:top-[25%] w-full'>
+			<div className='absolute top-[18%] lg:top-[25%] xxl:top-[15%] w-full'>
 				<div className='relative px-4 md:px-8 lg:px-12 lg:max-w-[1200px] mx-auto'>
 					<span>
 						<img src={Logo} alt='Logo' className='h-[20px]' />
@@ -83,14 +81,16 @@ const HeroSection = () => {
 							</span>
 							Play
 						</button>
-						<Link to={user ? "/myList" : "/signIn"}>
-							<button className='text-xs mr-4 px-6 py-2 rounded bg-gray-100/10 font-medium flex items-center'>
-								<span className='text-white mr-2'>
-									<MdLibraryAdd />
-								</span>
-								My List
-							</button>
-						</Link>
+						{user && (
+							<Link to={"/myList"}>
+								<button className='text-xs mr-4 px-6 py-2 rounded bg-gray-100/10 font-medium flex items-center'>
+									<span className='text-white mr-2'>
+										<MdLibraryAdd />
+									</span>
+									My List
+								</button>
+							</Link>
+						)}
 					</div>
 					<p className='text-gray-400 mb-2 text-xs lg:text-base'>
 						Released: {movie?.release_date}
@@ -100,7 +100,7 @@ const HeroSection = () => {
 					</p>
 				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 
