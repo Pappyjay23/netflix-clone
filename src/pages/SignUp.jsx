@@ -72,7 +72,7 @@ const SignUp = () => {
 							</button>
 						</form>
 						<div className='mt-8 flex justify-between'>
-							<div className='flex items-center'>
+							<div className='flex items- opacity-0'>
 								<input type='checkbox' id='checkBox' />
 								<label htmlFor="checkBox" className='text-xs text-gray-500 ml-2'>Remember me</label>
 							</div>
