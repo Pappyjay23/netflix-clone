@@ -2,6 +2,7 @@ import React, {StrictMode} from "react";
 import {createRoot} from 'react-dom/client';
 import "./index.css";
 import App from "./App";
+import * as serviceWorker from './service-worker';
 
 // 👇️ make sure to use the correct root element ID
 // from your public/index.html file
@@ -13,3 +14,5 @@ root.render(
 		<App />
 	</StrictMode>
 );
+
+serviceWorker.register();
