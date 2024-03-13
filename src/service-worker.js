@@ -1,80 +1,56 @@
-const isLocalhost = Boolean(
-    window.location.hostname === 'localhost' ||
-      window.location.hostname === '[::1]' ||
-      window.location.hostname.match(
-        /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
-      )
-  );
-  
-  export function register(config) {
-    if ('serviceWorker' in navigator) {
-      const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
-  
-      if (isLocalhost) {
-        checkValidServiceWorker(swUrl, config);
-      } else {
-        registerValidSW(swUrl, config);
-      }
-    }
+/* eslint-disable no-restricted-globals */
+import { clientsClaim } from 'workbox-core';
+import { ExpirationPlugin } from 'workbox-expiration';
+import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
+import { registerRoute } from 'workbox-routing';
+import { StaleWhileRevalidate } from 'workbox-strategies';
+
+clientsClaim();
+
+precacheAndRoute(self.__WB_MANIFEST);
+
+const fileExtensionRegexp = new RegExp('/[^/?]+\\.[^/]+$');
+registerRoute(
+  ({ request, url }) => {
+    // If this isn't a navigation, skip.
+    if (request.mode !== 'navigate') {
+      return false;
+    } // If this is a URL that starts with /_, skip.
+
+    if (url.pathname.startsWith('/_')) {
+      return false;
+    } // If this looks like a URL for a resource, because it contains // a file extension, skip.
+
+    if (url.pathname.match(fileExtensionRegexp)) {
+      return false;
+    } // Return true to signal that we want to use the handler.
+
+    return true;
+  },
+  createHandlerBoundToURL(process.env.PUBLIC_URL + '/index.html')
+);
+
+// An example runtime caching route for requests that aren't handled by the
+// precache, in this case same-origin .png requests like those from in public/
+registerRoute(
+  // Add in any other file extensions or routing criteria as needed.
+  ({ url }) => url.origin === self.location.origin && url.pathname.endsWith('.png'), // Customize this strategy as needed, e.g., by changing to CacheFirst.
+  new StaleWhileRevalidate({
+    cacheName: 'images',
+    plugins: [
+      // Ensure that once this runtime cache reaches a maximum size the
+      // least-recently used images are removed.
+      new ExpirationPlugin({ maxEntries: 50 }),
+    ],
+  })
+);
+
+// This allows the web app to trigger skipWaiting via
+// registration.waiting.postMessage({type: 'SKIP_WAITING'})
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
   }
-  
-  function registerValidSW(swUrl, config) {
-    navigator.serviceWorker
-      .register(swUrl)
-      .then(registration => {
-        registration.onupdatefound = () => {
-          const installingWorker = registration.installing;
-          if (installingWorker == null) {
-            return;
-          }
-          installingWorker.onstatechange = () => {
-            if (installingWorker.state === 'installed') {
-              if (navigator.serviceWorker.controller) {
-                console.log('New content is available and will be used when all tabs for this page are closed.');
-              } else {
-                console.log('Content is cached for offline use.');
-              }
-            }
-          };
-        };
-      })
-      .catch(error => {
-        console.error('Error during service worker registration:', error);
-      });
-  }
-  
-  function checkValidServiceWorker(swUrl, config) {
-    fetch(swUrl, {
-      headers: { 'Service-Worker': 'script' },
-    })
-      .then(response => {
-        const contentType = response.headers.get('content-type');
-        if (
-          response.status === 404 ||
-          (contentType != null && contentType.indexOf('javascript') === -1)
-        ) {
-          navigator.serviceWorker.ready.then(registration => {
-            registration.unregister().then(() => {
-              window.location.reload();
-            });
-          });
-        } else {
-          registerValidSW(swUrl, config);
-        }
-      })
-      .catch(() => {
-        console.log('No internet connection found. App is running in offline mode.');
-      });
-  }
-  
-  export function unregister() {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.ready
-        .then(registration => {
-          registration.unregister();
-        })
-        .catch(error => {
-          console.error(error.message);
-        });
-    }
-  }
+});
+
+// Any other custom service worker logic can go here.
