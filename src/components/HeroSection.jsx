@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContextUse } from "../context/authContext";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
+import LoadImage from '../images/lazy-load-image.jpg'
 
 const HeroSection = () => {
 	const [movies, setMovies] = useState([]);
@@ -59,7 +60,7 @@ const HeroSection = () => {
 				effect='blur'
 				className='h-[90vh] xxl:h-[70vh] sl:h-[50vh] w-full object-cover'
 				src={`https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`}
-				placeholderSrc={`https://cdn-images-1.medium.com/freeze/max/27/1*sg-uLNm73whmdOgKlrQdZA.jpeg?q=20`}
+				placeholderSrc={LoadImage}
 				alt='Movie'
 			/>
 			<div className='bg-black/80 h-[90vh] xxl:h-[70vh] sl:h-[50vh] absolute top-0 left-0 w-full'></div>

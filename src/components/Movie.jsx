@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import LoadImage from '../images/lazy-load-image.jpg'
 
 const Movie = ({ item }) => {
 	const [addMovie, setAddMovie] = useState(false);
@@ -108,22 +109,9 @@ const Movie = ({ item }) => {
 				effect='blur'
 				className='h-full w-full object-cover rounded-lg block group-hover/movie:hidden'
 				src={`https://image.tmdb.org/t/p/original/${item?.poster_path}`}
-				placeholderSrc={`https://cdn-images-1.medium.com/freeze/max/27/1*sg-uLNm73whmdOgKlrQdZA.jpeg?q=20`}
+				placeholderSrc={LoadImage}
 				alt='Movie'
 			/>
-			{/* <LazyLoadImage
-				width={"100%"}
-				effect='blur'
-				className='h-full w-full object-cover rounded-lg hidden group-hover/movie:block'
-				src={`https://image.tmdb.org/t/p/original/${item?.backdrop_path}`}
-				placeholderSrc={`https://cdn-images-1.medium.com/freeze/max/27/1*sg-uLNm73whmdOgKlrQdZA.jpeg?q=20`}
-				alt='Movie'
-			/> */}
-			{/* <img
-				src={`https://image.tmdb.org/t/p/original/${item?.poster_path}`}
-				alt='Movie'
-				className='h-full w-full object-cover rounded-lg block group-hover/movie:hidden'
-			/> */}
 			<img
 				src={`https://image.tmdb.org/t/p/original/${item?.backdrop_path}`}
 				alt='Movie'
