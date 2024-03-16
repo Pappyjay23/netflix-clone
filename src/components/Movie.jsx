@@ -8,6 +8,7 @@ import { AuthContextUse } from "../context/authContext";
 import { useNavigate } from "react-router-dom";
 import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { db } from "../config/firebase";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const Movie = ({ item }) => {
 	const [addMovie, setAddMovie] = useState(false);
@@ -101,12 +102,28 @@ const Movie = ({ item }) => {
 	};
 
 	return (
-		<div className='relative cursor-pointer block h-[200px] w-[120px] lg:h-[300px] lg:w-[200px] flex-shrink-0 scale-[.85] hover:scale-100 duration-500 group/movie'>
-			<img
+		<div className='relative cursor-pointer block h-[200px] w-[120px] lg:h-[300px] lg:w-[200px] flex-shrink-0 scale-[.85] hover:scale-100 duration-500 group/movie overflow-y-hidden'>
+			<LazyLoadImage
+				width={"100%"}
+				effect='blur'
+				className='h-full w-full object-cover rounded-lg block group-hover/movie:hidden'
+				src={`https://image.tmdb.org/t/p/original/${item?.poster_path}`}
+				placeholderSrc={`https://cdn-images-1.medium.com/freeze/max/27/1*sg-uLNm73whmdOgKlrQdZA.jpeg?q=20`}
+				alt='Movie'
+			/>
+			{/* <LazyLoadImage
+				width={"100%"}
+				effect='blur'
+				className='h-full w-full object-cover rounded-lg hidden group-hover/movie:block'
+				src={`https://image.tmdb.org/t/p/original/${item?.backdrop_path}`}
+				placeholderSrc={`https://cdn-images-1.medium.com/freeze/max/27/1*sg-uLNm73whmdOgKlrQdZA.jpeg?q=20`}
+				alt='Movie'
+			/> */}
+			{/* <img
 				src={`https://image.tmdb.org/t/p/original/${item?.poster_path}`}
 				alt='Movie'
 				className='h-full w-full object-cover rounded-lg block group-hover/movie:hidden'
-			/>
+			/> */}
 			<img
 				src={`https://image.tmdb.org/t/p/original/${item?.backdrop_path}`}
 				alt='Movie'

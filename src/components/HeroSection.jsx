@@ -56,7 +56,6 @@ const HeroSection = () => {
 		<>
 			<LazyLoadImage
 				width={"100%"}
-				// height={"85vh"}
 				effect='blur'
 				className='h-[90vh] xxl:h-[70vh] sl:h-[50vh] w-full object-cover'
 				src={`https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`}
