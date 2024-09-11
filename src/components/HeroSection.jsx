@@ -8,11 +8,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContextUse } from "../context/authContext";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import LoadImage from '../images/lazy-load-image.jpg'
+import LoadImage from "../images/lazy-load-image.jpg";
+import TrailerCard from "./TrailerCard";
 
 const HeroSection = () => {
 	const [movies, setMovies] = useState([]);
-	const [trailer, setTrailer] = useState();
+	const [trailer, setTrailer] = useState(null);
+	const [showTrailer, setShowTrailer] = useState(false);
 	const { user } = AuthContextUse();
 	const navigate = useNavigate();
 	const movie = movies[Math.floor(Math.random() * movies.length)];
@@ -26,12 +28,12 @@ const HeroSection = () => {
 	};
 
 	const getMovies = async () => {
-		await axios
-			.get(movieRequests.getNowPlayingMovies)
-			.then((resp) => {
-				setMovies(resp.data.results);
-			})
-			.catch((err) => console.log(err));
+		try {
+			const resp = await axios.get(movieRequests.getNowPlayingMovies);
+			setMovies(resp.data.results);
+		} catch (err) {
+			console.log(err);
+		}
 	};
 
 	useEffect(() => {
@@ -39,19 +41,20 @@ const HeroSection = () => {
 	}, []);
 
 	const getMovie = async (id) => {
-		await axios
-			.get(
+		try {
+			const resp = await axios.get(
 				`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${key}&language=en-US`
-			)
-			.then((resp) => {
-				let res = resp.data.results;
-				setTrailer(res.find((item) => item.name === "Official Trailer"));
-			})
-			.catch((err) => console.log(err));
+			);
+			const res = resp.data.results;
+			const officialTrailer = res.find(
+				(item) => item.name === "Official Trailer"
+			);
+			setTrailer(officialTrailer);
+			setShowTrailer(true);
+		} catch (err) {
+			console.log(err);
+		}
 	};
-
-	trailer &&
-		(window.location.href = `https://www.youtube.com/watch?v=${trailer?.key}`);
 
 	return (
 		<>
@@ -100,6 +103,9 @@ const HeroSection = () => {
 					</p>
 				</div>
 			</div>
+			{showTrailer && trailer && (
+				<TrailerCard setShowTrailer={setShowTrailer} trailer={trailer} />
+			)}
 		</>
 	);
 };
