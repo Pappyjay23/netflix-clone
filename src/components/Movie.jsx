@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { MdDoneAll } from "react-icons/md";
 import { BsFillPlayFill } from "react-icons/bs";
@@ -19,15 +19,15 @@ const Movie = ({ item }) => {
 	const { user } = AuthContextUse();
 	const navigate = useNavigate();
 
-	const dateReleased = () => {
+	const dateReleased = useCallback(() => {
 		if (item?.release_date || item?.first_air_date) {
 			const date = item?.release_date || item?.first_air_date;
 			return date.slice(0, 4);
 		}
-	};
+	}, [item?.release_date, item?.first_air_date]);
 
-	useEffect(() => {
-		const fetchMovie = async (id) => {
+	const fetchMovie = useCallback(
+		async (id) => {
 			try {
 				let url;
 				if (item?.release_date) {
@@ -35,19 +35,24 @@ const Movie = ({ item }) => {
 				} else if (item?.first_air_date) {
 					url = `https://api.themoviedb.org/3/tv/${id}/videos?api_key=${key}&language=en-US`;
 				}
+
 				const resp = await axios.get(url);
 				let res = resp.data.results;
 				const officialTrailer = res.find(
-					(item) =>
-						item.name === "Official Trailer" || item.name.includes("Official")
+					(video) =>
+						video.name === "Official Trailer" || video.name.includes("Official")
 				);
-				setTrailer(officialTrailer);
+				setTrailer(() => officialTrailer ? officialTrailer : res[0]);
 			} catch (err) {
 				console.log(err);
 			}
-		};
+		},
+		[item?.release_date, item?.first_air_date, setTrailer]
+	);
+
+	useEffect(() => {
 		fetchMovie(item?.id);
-	}, [item]);
+	}, [item, fetchMovie]);
 
 	const playTrailer = () => {
 		if (user) {
@@ -141,4 +146,4 @@ const Movie = ({ item }) => {
 	);
 };
 
-export default Movie;
+export default React.memo(Movie);
